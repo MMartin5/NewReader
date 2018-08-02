@@ -19,7 +19,7 @@ public class BeanNews {
 	}
 
 	public String getDescription() {
-		return description;
+		return description.equals("null") ? "" : description; // avoid displaying "null"
 	}
 
 	public String getUrl() {

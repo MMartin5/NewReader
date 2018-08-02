@@ -1,7 +1,12 @@
 package dao;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+
+import beans.BeanNews;
 
 public class DAONews {
 	/**
@@ -36,5 +41,21 @@ public class DAONews {
 			}
 			return false;
 		}
+	
+	public List<BeanNews> getNews() throws ClassNotFoundException, SQLException {
+		DAO dao = DAO.getDAO();
+		String query = "SELECT * FROM news ORDER BY publishedAt DESC;";
+		ResultSet res = dao.query(query);
+		List<BeanNews> newsList = new LinkedList<>();
+		while(res.next()){
+			BeanNews news = new BeanNews(
+					res.getString("title"),
+					res.getString("description"), 
+					res.getString("url"), 
+					res.getLong("publishedAt"));
+			newsList.add(news);
+		}
+		return newsList;
+	}
 
 }
