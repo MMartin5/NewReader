@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
+
+import redis.clients.jedis.Jedis;
+
 import java.sql.ResultSet;
 
 public class DAO {
 	private static DAO singleton = null;
-	Connection connect;
+	Connection mysqlConnect;
+	Jedis jedisConnect;
 	
 	public static DAO getDAO() 
 		throws ClassNotFoundException, SQLException 
@@ -19,11 +23,16 @@ public class DAO {
 			Scanner scan = new Scanner(System.in);
 			String pwd = scan.nextLine();
 			scan.close();
-			// Get unique connection
-			DAOConnection daoConnect = new DAOConnection(pwd);
+			// Get unique MySQL connection
+			DAOMysqlConnection daoConnect = new DAOMysqlConnection(pwd);
 			daoConnect.connect();
+			// Get unique Redis connection
+			DAORedisConnection redisConnect = new DAORedisConnection();
+			redisConnect.connect();
+			// Init singleton
 			singleton = new DAO();
-			singleton.connect = daoConnect.getConnection();
+			singleton.mysqlConnect = daoConnect.getConnection();
+			singleton.jedisConnect = redisConnect.getConnection();
 		}
 		return singleton;
 	}
@@ -31,7 +40,7 @@ public class DAO {
 	public ResultSet query(String query) 
 			throws SQLException, ClassNotFoundException
 	{
-		Statement st = connect.createStatement();
+		Statement st = mysqlConnect.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		return rs;
 	}

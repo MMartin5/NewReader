@@ -4,13 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DAOConnection {
+public class DAOMysqlConnection {
 	private final String url;
 	private final String user;
 	private final String pwd;
 	private Connection connect;
 	
-	public DAOConnection(String password) {
+	public DAOMysqlConnection(String password) {
 		url = Config1.url;
 		user = Config1.user;
 		pwd = password;
