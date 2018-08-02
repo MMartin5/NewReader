@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
 import beans.BeanNews;
+import dao.DAO;
+import dao.DAONews;
 
 
 public class NewsAggregator {
@@ -79,6 +82,23 @@ public class NewsAggregator {
 		return new BeanNews(title, description, url, publishedAt);
 	}
 	
+	public void publishNews(BeanNews news) {
+		try {
+			DAONews dao = new DAONews();
+			boolean res = dao.addNews(news.getTitle(), 
+					news.getDescription(), 
+					news.getUrl(), 
+					news.getPublishedAt());
+			if (res) {
+				System.out.println("News successfully added!");
+			}
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void connectToAPI() {
 		// Connect to API
 		try {
@@ -105,6 +125,7 @@ public class NewsAggregator {
 							// Get the news object from the current JSON object
 							BeanNews news = readNews(parser);
 							System.out.println(String.format("%s %s %s", news.getTitle(), news.getUrl(), news.getDescription()));
+							publishNews(news);
 						}
 						else {
 							parser.nextToken();
