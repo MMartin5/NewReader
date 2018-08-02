@@ -90,12 +90,15 @@ public class NewsAggregator {
 					news.getUrl(), 
 					news.getPublishedAt());
 			if (res) {
-				System.out.println("News successfully added!");
+				System.out.println("[DEBUG] News successfully added!");
 			}
 			
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		}
+		catch (SQLException e) {
+			System.out.println("[DEBUG] News already added.");
 		}
 	}
 	
@@ -124,7 +127,7 @@ public class NewsAggregator {
 						if (parser.getCurrentToken() == JsonToken.START_OBJECT) {
 							// Get the news object from the current JSON object
 							BeanNews news = readNews(parser);
-							System.out.println(String.format("%s %s %s", news.getTitle(), news.getUrl(), news.getDescription()));
+							System.out.println(String.format("[DEBUG] %s", news.getTitle()));
 							publishNews(news);
 						}
 						else {
