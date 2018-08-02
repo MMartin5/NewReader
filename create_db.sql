@@ -7,5 +7,5 @@ CREATE TABLE news(
     title VARCHAR(200),
     description TEXT,
     url VARCHAR(255),
-    publishedAt INT
+    publishedAt BIGINT
 );
